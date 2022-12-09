@@ -9,3 +9,21 @@ redis:
       min-idle: 2
       max-wait: 100
       max-active: 100
+
+forest:
+  log-response-content: true
+  max-connections: 100
+  timeout: 3000
+  connect-timeout: 3000
+  read-timeout: 3000
+  variables:
+    phpUrl: http://8.142.141.144
+    drawUrl: https://wenxin.baidu.com/moduleApi/portal/api
+
+ai-draw:
+  api-key:
+  secret-key:
+
+
+oss:
+  bookDomain: https://eee.com
