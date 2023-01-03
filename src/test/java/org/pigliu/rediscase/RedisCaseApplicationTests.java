@@ -2,6 +2,7 @@ package org.pigliu.rediscase;
 
 import org.junit.jupiter.api.Test;
 import org.pigliu.rediscase.service.DrawService;
+import org.pigliu.rediscase.service.RedisPipleService;
 import org.pigliu.rediscase.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,9 @@ class RedisCaseApplicationTests {
 
     @Autowired
     private DrawService drawService;
+
+    @Autowired
+    private RedisPipleService pipleService;
 //
 //    @Test
 //    void contextLoads () {
@@ -43,4 +47,11 @@ class RedisCaseApplicationTests {
     void drawTest() {
         drawService.drawTest();
     }
+
+
+    @Test
+    void execute() {
+        pipleService.execute();
+    }
+
 }

@@ -274,6 +274,65 @@ public class DrawService {
         return new Dimension(length > actualWidth ? actualWidth : length,paddingTop + top - marginTop);
     }
 
+
+    /**
+     * 添加文字
+     * <pre>
+     *     在某个固定宽度的画板上添加文字，文字超过宽度限制自动换行
+     *     其余内容如果超过最大行数，...显示
+     * </pre>
+     * @param g       画板
+     * @param font    文字字体
+     * @param text    文字
+     * @param width   宽度限制
+     * @param marginTop  距离顶部高度
+     * @param indentWidth  首行缩进距离
+     * @param lineHeight 行高
+     * @param maxRow  最大行数
+     * @return 返回文字所占用的高度，用于后续操作画板
+     */
+    public Dimension drawWrapString(Graphics g, Font font, String text, int width, int marginTop,
+                                            int marginLeft, int indentWidth, int lineHeight, int maxRow) {
+        String prompt = StrUtil.maxLength(text, 1000);
+        FontMetrics metrics = g.getFontMetrics(font);
+        int length = metrics.stringWidth(prompt);
+        int height = metrics.getAscent() - metrics.getLeading() - metrics.getDescent();
+        int row = 1;
+        int top = (lineHeight - height) / 2;
+        int paddingTop = marginTop;
+        int firstRowWidth = width - indentWidth;
+        if (length > firstRowWidth) {
+            int rowLen = 0;
+            int lastIndex = 0;
+            for (int i = 0; i < prompt.length(); i++) {
+                rowLen += metrics.charWidth(prompt.charAt(i));
+                int fontMarginHeight = row == 1 ? height + top : lineHeight + top;
+                int rowWidth = row == 1 ? firstRowWidth : width;
+                int leftWidth = row == 1 ?  indentWidth + marginLeft : marginLeft;
+                if (rowLen >= rowWidth - 15) {
+                    if (row == maxRow) {
+                        String lastRowTxt = i == prompt.length() - 1 ?
+                                prompt.substring(lastIndex, i + 1) : prompt.substring(lastIndex, i) + "...";
+                        g.drawString(lastRowTxt, leftWidth, paddingTop += fontMarginHeight);
+                        break;
+                    }
+                    rowLen = 0;
+                    g.drawString(prompt.substring(lastIndex, i + 1), leftWidth, paddingTop += fontMarginHeight);
+                    row++;
+                    lastIndex = i + 1;
+                }
+                if (i == prompt.length() - 1) {
+                    g.drawString(prompt.substring(lastIndex), leftWidth, paddingTop += fontMarginHeight);
+                }
+            }
+        } else {
+            int leftWidth = row == 1 ?  indentWidth + marginLeft : marginLeft;
+            g.drawString(prompt, leftWidth, paddingTop += top + height);
+        }
+        int actualWidth = maxRow == 1 ? firstRowWidth : width;
+        return new Dimension(length > actualWidth ? actualWidth : length,paddingTop + top - marginTop);
+    }
+
     @SneakyThrows
     public void drawTest() {
         System.out.println(opmDomain);
@@ -281,22 +340,25 @@ public class DrawService {
         BufferedImage template = ImgUtil.read(resource.getInputStream());
         Graphics2D g = template.createGraphics();
 
-        Font font = new Font(null, Font.PLAIN, 120);
-        g.setFont(font);
-        g.setColor(Color.CYAN);
-        FontMetrics metrics = g.getFontMetrics(font);
-        metrics.getAscent();
-        metrics.getDescent();
-        metrics.getLeading();
-        g.drawString("Sphinx", 0, metrics.getAscent());
-        g.setColor(new Color(255, 89, 100));
-        g.drawLine(0, metrics.getAscent(), template.getWidth(), metrics.getAscent());
-        g.setColor(new Color(40, 178, 9));
-        g.drawLine(0, metrics.getHeight(), template.getWidth(), metrics.getHeight());
-        g.setColor(new Color(255, 100, 230));
-        g.drawLine(0, metrics.getDescent(), template.getWidth(), metrics.getDescent());
-        g.setColor(new Color(255, 189, 100));
-        g.drawLine(0, metrics.getAscent() - metrics.getDescent(), template.getWidth(), metrics.getAscent() - metrics.getDescent());
+        g.setFont(USER_NICK_FONT);
+        g.setColor(SHARE_COLOR);
+        FontMetrics metrics = g.getFontMetrics(USER_NICK_FONT);
+        int width = metrics.stringWidth("木马不是马：");
+        Dimension dimension = drawWrapString(g, USER_NICK_FONT, "木马不是马:", 900
+                , 100, 30, 0, 60, 2);
+        g.setColor(USER_NICK_COLOR);
+        drawWrapString(g, USER_NICK_FONT, "你嘴凑上来，我对你嘴说，这句话就一直钻到你心里，省的走远路，拐了弯从耳朵里进去  ——钱钟书",
+                template.getWidth() - width, 100, 30,  dimension.width + 10, 60, 2);
+
+//        g.drawString("Sphinx", 0, metrics.getAscent());
+//        g.setColor(new Color(255, 89, 100));
+//        g.drawLine(0, metrics.getAscent(), template.getWidth(), metrics.getAscent());
+//        g.setColor(new Color(40, 178, 9));
+//        g.drawLine(0, metrics.getHeight(), template.getWidth(), metrics.getHeight());
+//        g.setColor(new Color(255, 100, 230));
+//        g.drawLine(0, metrics.getDescent(), template.getWidth(), metrics.getDescent());
+//        g.setColor(new Color(255, 189, 100));
+//        g.drawLine(0, metrics.getAscent() - metrics.getDescent(), template.getWidth(), metrics.getAscent() - metrics.getDescent());
         g.dispose();
         File file = new File("/Users/liufuqiang/Downloads/baiduImg/" + DateUtil.current() + "test.jpg");
         ImgUtil.write(template, file);
