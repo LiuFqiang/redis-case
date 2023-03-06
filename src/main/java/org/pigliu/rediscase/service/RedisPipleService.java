@@ -30,7 +30,9 @@ public class RedisPipleService {
 //            p.incrBy("liu", 1);
 //            return p.syncAndReturnAll();
 //        });
-        byte[] bytes = FileUtil.readBytes("/Users/liufuqiang/Downloads/123.pdf");
-        FileUtil.writeBytes(bytes, new File("/Users/liufuqiang/Downloads/456.pdf"));
+//        byte[] bytes = FileUtil.readBytes("/Users/liufuqiang/Downloads/123.pdf");
+//        FileUtil.writeBytes(bytes, new File("/Users/liufuqiang/Downloads/456.pdf"));
+        stringRedisTemplate.opsForValue().set("test1", "我的老婆潘金莲");
+        System.out.println("1111");
     }
 }

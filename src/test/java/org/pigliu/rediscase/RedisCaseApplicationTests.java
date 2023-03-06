@@ -1,7 +1,9 @@
 package org.pigliu.rediscase;
 
+import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Test;
 import org.pigliu.rediscase.service.DrawService;
+import org.pigliu.rediscase.service.DynamicSelectService;
 import org.pigliu.rediscase.service.RedisPipleService;
 import org.pigliu.rediscase.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,12 @@ class RedisCaseApplicationTests {
 
     @Autowired
     private RedisPipleService pipleService;
+
+    @Autowired
+    private StringEncryptor stringEncryptor;
+
+    @Autowired
+    private DynamicSelectService dynamicSelectService;
 //
 //    @Test
 //    void contextLoads () {
@@ -54,4 +62,15 @@ class RedisCaseApplicationTests {
         pipleService.execute();
     }
 
+
+    @Test
+    void generateEncryptor() {
+        String password = "udC0&4^&#fez5";
+        System.out.println(stringEncryptor.encrypt(password));
+    }
+
+    @Test
+    void dynamicQuery() {
+        dynamicSelectService.queryList();
+    }
 }
