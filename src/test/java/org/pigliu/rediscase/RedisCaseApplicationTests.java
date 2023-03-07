@@ -2,10 +2,7 @@ package org.pigliu.rediscase;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Test;
-import org.pigliu.rediscase.service.DrawService;
-import org.pigliu.rediscase.service.DynamicSelectService;
-import org.pigliu.rediscase.service.RedisPipleService;
-import org.pigliu.rediscase.service.TransactionService;
+import org.pigliu.rediscase.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -26,6 +23,9 @@ class RedisCaseApplicationTests {
 
     @Autowired
     private DynamicSelectService dynamicSelectService;
+
+    @Autowired
+    private RedisLuaService redisLuaService;
 //
 //    @Test
 //    void contextLoads () {
@@ -72,5 +72,10 @@ class RedisCaseApplicationTests {
     @Test
     void dynamicQuery() {
         dynamicSelectService.queryList();
+    }
+
+    @Test
+    void redisLus() {
+        redisLuaService.remListLua();
     }
 }
