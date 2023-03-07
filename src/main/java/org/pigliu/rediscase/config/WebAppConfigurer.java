@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebAppConfigurer implements WebMvcConfigurer {
 
 	@Override
-	public void addInterceptors (InterceptorRegistry registry) {
+	public void addInterceptors(InterceptorRegistry registry) {
 		PhpSignatureInterceptor phpSignatureInterceptor = new PhpSignatureInterceptor();
 		registry.addInterceptor(phpSignatureInterceptor).addPathPatterns("/test/**");
 	}

@@ -1,16 +1,10 @@
 package org.pigliu.rediscase.interceptor;
 
-import cn.hutool.core.lang.TypeReference;
-import cn.hutool.core.net.URLDecoder;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.internal.http2.ErrorCode;
-import org.apache.tomcat.util.http.RequestUtil;
 import org.pigliu.rediscase.annotation.Signature;
 import org.pigliu.rediscase.filter.RequestBodyCopyFilter;
 import org.pigliu.rediscase.utils.SignUtils;
@@ -20,7 +14,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -85,6 +78,11 @@ public class PhpSignatureInterceptor implements HandlerInterceptor {
         }
         writeErrorResponseCode(response);
         return false;
+    }
+
+    public static void main (String[] args) {
+        String md5 = getMd5().digestHex("username=liufuqiang", StandardCharsets.UTF_8);
+        System.out.println(md5);
     }
 
     private void writeErrorResponseCode(HttpServletResponse response) {

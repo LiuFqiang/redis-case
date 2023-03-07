@@ -4,10 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.BufferedReader;
@@ -20,8 +18,6 @@ import java.nio.charset.StandardCharsets;
  * post请求过滤器
  * @author liufuqiang
  */
-//@Component
-//@WebFilter(filterName = "RequestBodyCopyFilter", urlPatterns = "/*")
 public class RequestBodyCopyFilter implements Filter {
     @Override
     public void doFilter (ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
