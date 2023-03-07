@@ -2,6 +2,7 @@ package org.pigliu.rediscase.interceptor;
 
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.net.URLDecoder;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.extra.servlet.ServletUtil;
@@ -64,7 +65,7 @@ public class PhpSignatureInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private static final String MD5_SALT = "6d4s7ctpr1qb8krj";
+    private static final String MD5_SALT = "gLvzYnRhwCFKG_WP";
 
     private static final MD5 getMd5() {
         return new MD5(MD5_SALT.getBytes(StandardCharsets.UTF_8));
