@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.pigliu.rediscase.annotation.Signature;
 import org.pigliu.rediscase.dto.R;
 import org.pigliu.rediscase.service.DynamicSelectService;
+import org.pigliu.rediscase.service.ThreadPoolService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,8 @@ import java.util.Map;
 public class TestController {
 
     private final DynamicSelectService dynamicSelectService;
+
+    private final ThreadPoolService threadPoolService;
 
     @GetMapping("/testGet")
     @Signature
@@ -48,6 +51,12 @@ public class TestController {
     @GetMapping("/test4")
     public Object queryList() {
         dynamicSelectService.queryList();
+        return R.ok();
+    }
+
+    @GetMapping("/testPool")
+    public Object testPool() {
+        threadPoolService.threadPool();
         return R.ok();
     }
 
