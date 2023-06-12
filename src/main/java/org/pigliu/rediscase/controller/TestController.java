@@ -7,9 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.pigliu.rediscase.annotation.Signature;
 import org.pigliu.rediscase.dto.R;
 import org.pigliu.rediscase.service.DynamicSelectService;
+import org.pigliu.rediscase.service.ThreadLocalService;
 import org.pigliu.rediscase.service.ThreadPoolService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@Validated
 @RequestMapping("/test")
 @Slf4j
+@Validated
 @RequiredArgsConstructor
 public class TestController {
 
@@ -28,9 +30,9 @@ public class TestController {
     private final ThreadPoolService threadPoolService;
 
     @GetMapping("/testGet")
-    @Signature
     public R testGetSign(@RequestParam String username) {
         log.info("params :{}", username);
+        System.out.println(Thread.currentThread().getName());
         return R.ok("success");
     }
 
@@ -56,7 +58,12 @@ public class TestController {
 
     @GetMapping("/testPool")
     public Object testPool() {
-        threadPoolService.threadPool();
+        threadPoolService.testShutdown();
+        return R.ok();
+    }
+
+    @GetMapping("/json1")
+    public Object testPar(@NotNull final Integer a) {
         return R.ok();
     }
 

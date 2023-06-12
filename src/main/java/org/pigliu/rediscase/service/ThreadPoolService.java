@@ -2,14 +2,14 @@ package org.pigliu.rediscase.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.pigliu.rediscase.dto.request.QueryResponse;
+import org.springframework.beans.factory.config.ServiceLocatorFactoryBean;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author liufuqiang
@@ -32,6 +32,33 @@ public class ThreadPoolService {
                 log.info("thread name:{}, {}， pool size:{}", Thread.currentThread().getName(), finalI, threadPoolExecutor.getPoolSize());
             });
         }
+    }
+
+    public void testShutdown() {
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        for (int i = 0; i < 100; i++) {
+            int finalI = i;
+            executorService.execute(() -> {
+                System.out.println(Thread.currentThread().getName() + "---" + finalI);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        executorService.shutdown();
+
+        while (!executorService.isTerminated()) {
+            System.out.println(1);
+        }
+
+        System.out.println(executorService.isShutdown());
+        System.out.println(executorService.isTerminated());
+    }
+
+    public static void main(String[] args) {
+
     }
 
     private static class TaskThreadFactory implements ThreadFactory {
