@@ -2,17 +2,19 @@ package org.pigliu.rediscase.controller;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
+import com.dtflys.forest.http.ForestResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.common.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.pigliu.rediscase.annotation.Signature;
 import org.pigliu.rediscase.dto.R;
-import org.pigliu.rediscase.service.DynamicSelectService;
-import org.pigliu.rediscase.service.ThreadLocalService;
-import org.pigliu.rediscase.service.ThreadPoolService;
+import org.pigliu.rediscase.mapper.DynamicMapper;
+import org.pigliu.rediscase.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +26,14 @@ import java.util.Map;
 @Validated
 @RequiredArgsConstructor
 public class TestController {
-
     private final DynamicSelectService dynamicSelectService;
 
     private final ThreadPoolService threadPoolService;
+
+    private final RocketQueue rocketQueue;
+
+    private final DynamicMapper dynamicMapper;
+
 
     @GetMapping("/testGet")
     public R testGetSign(@RequestParam String username) {
@@ -65,6 +71,18 @@ public class TestController {
     @GetMapping("/json1")
     public Object testPar(@NotNull final Integer a) {
         return R.ok();
+    }
+
+    @GetMapping("/testInter")
+    public Object testInter() {
+        rocketQueue.sendMsg();
+        return R.ok();
+    }
+
+    @GetMapping("/updateSql")
+    public Object updateSql() {
+        int rows = dynamicMapper.updateRows();
+        return R.ok(rows);
     }
 
     @Data

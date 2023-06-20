@@ -17,4 +17,7 @@ public interface DynamicMapper {
                      @Param("condition") String condition,
                      @Param("limit") String limit,
                      ResultHandler<Map<String, Object>> handler);
+
+    @Update("update b_book set author_name = '111111' where name = '1111';")
+    int updateRows();
 }
