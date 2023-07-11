@@ -14,7 +14,16 @@ import org.pigliu.rediscase.annotation.Signature;
 import org.pigliu.rediscase.dto.R;
 import org.pigliu.rediscase.mapper.DynamicMapper;
 import org.pigliu.rediscase.service.*;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +34,18 @@ import java.util.Map;
 @Slf4j
 @Validated
 @RequiredArgsConstructor
-public class TestController {
+public class TestController implements BeanFactoryAware, BeanNameAware, BeanPostProcessor {
     private final DynamicSelectService dynamicSelectService;
 
     private final ThreadPoolService threadPoolService;
 
-    private final RocketQueue rocketQueue;
+    private final RedisPipleService redisPipleService;
+
+    @Autowired
+    @Qualifier("rocket")
+    private  Queue queue;
+
+    private final Environment environment;
 
     private final DynamicMapper dynamicMapper;
 
@@ -75,14 +90,25 @@ public class TestController {
 
     @GetMapping("/testInter")
     public Object testInter() {
-        rocketQueue.sendMsg();
+//        queue.sendMsg();
+        String[] profiles = environment.getActiveProfiles();
         return R.ok();
     }
 
     @GetMapping("/updateSql")
     public Object updateSql() {
-        int rows = dynamicMapper.updateRows();
-        return R.ok(rows);
+        redisPipleService.testBit();
+        return R.ok();
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+
+    }
+
+    @Override
+    public void setBeanName(String name) {
+
     }
 
     @Data

@@ -2,7 +2,11 @@ package org.pigliu.rediscase.service;
 
 import javafx.beans.NamedArg;
 import org.elasticsearch.common.inject.name.Named;
+import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Constructor;
@@ -13,17 +17,13 @@ import java.lang.reflect.Constructor;
  * @author liufuqiang
  * @since 2023/6/14
  */
-@Component
-public class RocketQueue implements Queue{
+@Component("rocket")
+public class RocketQueue implements Queue, BeanNameAware {
     @Override
     public boolean sendMsg() {
         System.out.println("rocter queue");
+        System.out.println(beanName);
         return false;
-    }
-
-    @Bean
-    public RocketQueue newQueue() {
-        return new RocketQueue();
     }
 
     @Override
@@ -35,5 +35,12 @@ public class RocketQueue implements Queue{
         Class<?> clazz = Class.forName("org.pigliu.rediscase.service.RocketQueue");
         Constructor<?>[] ator = clazz.getDeclaredConstructors();
 
+    }
+
+    private String beanName;
+
+    @Override
+    public void setBeanName(String name) {
+        this.beanName = name;
     }
 }
