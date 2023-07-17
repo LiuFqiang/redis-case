@@ -1,8 +1,13 @@
 package org.pigliu.rediscase;
 
+import cn.hutool.core.util.IdUtil;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Test;
 import org.pigliu.rediscase.service.*;
+import org.pigliu.rediscase.service.function.Message;
+import org.pigliu.rediscase.service.strategy.EventContext;
+import org.pigliu.rediscase.service.strategy.EventStrategy;
+import org.pigliu.rediscase.service.strategy.MessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -77,5 +82,15 @@ class RedisCaseApplicationTests {
     @Test
     void redisLus() {
         redisLuaService.remListLua();
+    }
+
+    @Autowired
+    EventContext eventContext;
+
+    @Test
+    void testStrategy() {
+        EventStrategy event = eventContext.getEvent(MessageType.MAIL_163);
+        Message message = Message.builder().id(IdUtil.nanoId()).type(MessageType.MAIL_163).build();
+        event.handleMessage(message);
     }
 }

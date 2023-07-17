@@ -1,8 +1,6 @@
 package org.pigliu.rediscase.dto;
 
-import lombok.Builder;
-import lombok.Singular;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -16,6 +14,8 @@ import java.util.List;
  */
 @Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookInfo {
 
     @DateTimeFormat
