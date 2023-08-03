@@ -3,6 +3,7 @@ package org.pigliu.rediscase.controller;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
 import com.dtflys.forest.http.ForestResponse;
+import io.netty.util.concurrent.CompleteFuture;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 @RestController
 @RequestMapping("/test")
@@ -99,6 +106,35 @@ public class TestController implements BeanFactoryAware, BeanNameAware, BeanPost
     public Object updateSql() {
         redisPipleService.testBit();
         return R.ok();
+    }
+
+    @GetMapping("/test")
+    public Object testForkJoin(int seconds) throws ExecutionException, InterruptedException {
+            CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+                try {
+                    TimeUnit.SECONDS.sleep(seconds);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return "CompletableFuture";
+            });
+            System.out.println(future.get());
+//        }
+        return R.ok(future.get());
+    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        for (int i = 0; i < 1000; i++) {
+            CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return "CompletableFuture";
+            });
+            System.out.println(future.get() + i);
+        }
     }
 
     @Override

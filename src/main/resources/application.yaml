@@ -11,6 +11,11 @@ redis:
       max-active: 100
 
 spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enable: true
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
