@@ -3,6 +3,7 @@ package org.pigliu.rediscase;
 import cn.hutool.core.util.IdUtil;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Test;
+import org.pigliu.rediscase.listener.event.CustomEventService;
 import org.pigliu.rediscase.service.*;
 import org.pigliu.rediscase.service.function.Message;
 import org.pigliu.rediscase.service.strategy.EventContext;
@@ -92,5 +93,13 @@ class RedisCaseApplicationTests {
         EventStrategy event = eventContext.getEvent(MessageType.MAIL_163);
         Message message = Message.builder().id(IdUtil.nanoId()).type(MessageType.MAIL_163).build();
         event.handleMessage(message);
+    }
+
+    @Autowired
+    CustomEventService customEventService;
+
+    @Test
+    void publish() {
+        customEventService.publish();
     }
 }
