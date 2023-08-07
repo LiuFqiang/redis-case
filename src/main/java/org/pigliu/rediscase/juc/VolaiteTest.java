@@ -1,6 +1,7 @@
 package org.pigliu.rediscase.juc;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -11,13 +12,15 @@ import java.util.concurrent.locks.LockSupport;
  */
 public class VolaiteTest {
 
-    public static volatile int a;
+    public static  int a;
+
+    public static AtomicBoolean running = new AtomicBoolean(true);
 
     private void testA() {
-        while (a != 100) {
-//            System.out.println(a);
+        while (running.get()) {
+
         }
-        System.out.println(a);
+        System.out.println(running.get());
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -25,6 +28,6 @@ public class VolaiteTest {
         new Thread(() -> volaiteTest.testA(), "Thread-A").start();
 
         TimeUnit.SECONDS.sleep(10);
-        VolaiteTest.a = 100;
+        VolaiteTest.running.getAndSet( false);
     }
 }
