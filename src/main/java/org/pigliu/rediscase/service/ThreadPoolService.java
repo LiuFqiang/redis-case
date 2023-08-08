@@ -1,7 +1,6 @@
 package org.pigliu.rediscase.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.pigliu.rediscase.dto.request.QueryResponse;
 import org.springframework.beans.factory.config.ServiceLocatorFactoryBean;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -64,7 +63,7 @@ public class ThreadPoolService {
     private static class TaskThreadFactory implements ThreadFactory {
 
         @Override
-        public Thread newThread(@NotNull Runnable r) {
+        public Thread newThread(Runnable r) {
             return null;
         }
     }

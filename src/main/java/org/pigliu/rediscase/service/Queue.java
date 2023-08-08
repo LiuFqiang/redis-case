@@ -1,6 +1,5 @@
 package org.pigliu.rediscase.service;
 
-import org.elasticsearch.core.List;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 

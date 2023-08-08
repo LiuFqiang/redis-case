@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.inject.Inject;
-import org.jetbrains.annotations.NotNull;
 import org.pigliu.rediscase.annotation.Signature;
 import org.pigliu.rediscase.dto.R;
 import org.pigliu.rediscase.mapper.DynamicMapper;
@@ -91,7 +90,7 @@ public class TestController implements BeanFactoryAware, BeanNameAware, BeanPost
     }
 
     @GetMapping("/json1")
-    public Object testPar(@NotNull final Integer a) {
+    public Object testPar(final Integer a) {
         return R.ok();
     }
 
