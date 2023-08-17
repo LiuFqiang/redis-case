@@ -27,7 +27,6 @@ public @interface ConditionalOnPropertyNotEmpty {
 
     String value();
 
-//    @Order(Ordered.HIGHEST_PRECEDENCE)
     class OnPropertyNotEmptyCondition implements Condition {
 
         @Override
